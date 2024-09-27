@@ -1,0 +1,75 @@
+﻿@model IEnumerable<LivroModel>
+
+
+
+
+
+<div class="py-5">
+	<div class="container">
+
+		<div class="text-center mb-5">
+			<a class="btn btn-success" asp-action="Cadastrar" asp-controller="Livro">Cadastrar novo livro</a>
+		</div>
+
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-0">
+			@if (Model != null)
+			{
+				@if (Model.Count() > 0)
+				{
+					@foreach (var livro in Model)
+					{
+						<div class="card mx-3 my-3 p-2" style="width: 12rem">
+
+							@if (livro.Capa != null)
+							{
+								<img src="/imagem/@livro.Capa" class="card-img-top align-self-center" style="width: 150px; height: 200px" />
+							}
+							else
+							{
+								<img src="..." class="card-img-top" />
+							}
+
+							<div class="card-body">
+								<h5 class="card-title">@livro.Titulo</h5>
+							</div>
+
+							<div>
+								<a class="btn btn-warning w-100 mb-1" 
+								asp-action="Editar" 
+								asp-controller="Livro" 
+								asp-route-id="@livro.Id">Editar</a>
+								<a class="btn btn-danger w-100 btn-excluir" 
+								data-id="@livro.Id"
+								id="itemRemover@(livro.Id)"
+								onclick="excluirItemSelecionado(this); return false"
+								href="#">Remover</a>
+							</div>
+
+						</div>
+					}
+				}
+			}
+		</div>
+
+	</div>
+</div>
+
+<script>
+	async function excluirItemSelecionado(item) {
+		var idLivro = item.getAttribute('data-id');
+		var resultado = confirm("Deseja excluir este livro?");
+		if (resultado == true) {
+			await confirmarExclusao(idLivro);
+		}
+	}
+
+	async function confirmarExclusao(id){
+		const response = await fetch(`/livro/excluir/${id}`);
+		const data = await response.json();
+		alert(data.message);
+		if (data.ok){
+			let elementLivro = document.getElementById(`itemRemover${id}`);
+			elementLivro.parentElement.parentElement.remove();
+		}
+	}
+</script>
