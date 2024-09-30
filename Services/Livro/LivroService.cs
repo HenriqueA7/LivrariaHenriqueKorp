@@ -44,7 +44,7 @@ namespace LivrariaHenriqueKorp.Services.Livro
 				{
 					Titulo = livroCriacaoDto.Titulo,
 					Descricao = livroCriacaoDto.Descricao,
-					Valor = livroCriacaoDto.Valor,
+					Valor = (double)livroCriacaoDto.Valor,
 					Capa = nomeCaminhoImagem
 				};
 
